@@ -27,6 +27,7 @@ app.get("/status", (req, res) => {
 
 app.get("/outgoing", (req, res) => {
     console.log("outgoing call");
+    res.send("call in progress");
     makeOutBoundCall();
 })
 
@@ -76,7 +77,7 @@ app.ws("/connection", (ws) => {
                     console.log(`Twilio -> Starting Media Stream for ${streamSid}`.underline.red);
                     ttsService.generate({
                         partialResponseIndex: null,
-                        partialResponse: "Hello! I understand you\"re looking for a pair of AirPods, is that correct?"
+                        partialResponse: `Hello ${process.env.NAME}! How are you doing today?`,
                     }, 0);
                 });
             } else if (msg.event === "media") {

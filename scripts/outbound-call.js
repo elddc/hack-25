@@ -18,6 +18,8 @@ async function makeOutBoundCall() {
         from: process.env.FROM_NUMBER
     })
     .then(call => console.log(call.sid));
+
+    return 0;
 }
 
 // makeOutBoundCall();
