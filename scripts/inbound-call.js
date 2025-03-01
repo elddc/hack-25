@@ -14,7 +14,7 @@ async function makeInboundCall() {
     twiml.pause({length: 10});
     twiml.say('Which models of airpods do you have available right now?');
     twiml.pause({length: 30});
-    twiml.hangup();
+    // twiml.hangup();
 
     console.log(twiml.toString());
 

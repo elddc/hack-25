@@ -20,4 +20,5 @@ async function makeOutBoundCall() {
     .then(call => console.log(call.sid));
 }
 
-makeOutBoundCall();
+// makeOutBoundCall();
+module.exports = {makeOutBoundCall};
