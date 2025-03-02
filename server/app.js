@@ -4,6 +4,7 @@ require("colors");
 const express = require("express");
 const ExpressWs = require("express-ws");
 const axios = require("axios");
+const cors = require("cors");
 
 const {GptService} = require("./services/gpt-service");
 const {StreamService} = require("./services/stream-service");
@@ -18,6 +19,7 @@ const VoiceResponse = require("twilio").twiml.VoiceResponse;
 const client = require("twilio").calls;
 
 const app = express();
+app.use(cors()); // Enable CORS for all routes
 ExpressWs(app);
 
 const PORT = process.env.PORT || 3000;

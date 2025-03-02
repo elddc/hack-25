@@ -8,6 +8,7 @@ import {LineChart, Line, Tooltip, YAxis} from 'recharts';
 import {IconArrowRight, IconPhoneIncoming, IconPhoneOutgoing} from "@tabler/icons-react";
 
 const emojis = ["😭", "😢", "😞", "😔", "😕", "😐", "🙂", "😊", "😁", "😆", "🤩"];
+const moods = [1,2,5,7,9];
 
 const Dashboard = () => {
     const [calls, setCalls] = useState([
@@ -41,9 +42,9 @@ const Dashboard = () => {
     //     setCalls([...calls, data]);
     // }, []);
     useEffect(() => {
-        fetch(`https://localhost:3000/chat`)
+        axios.get(`http://localhost:3000/chat`)
             .then(res => {
-                setMessages(res.body);
+                setCalls(res.data);
             })
             .catch(error => {
                 console.error("Error fetching messages:", error);
@@ -87,7 +88,7 @@ const Dashboard = () => {
         <Flex direction="column" align="end">
             <Text as="h1" fontSize="lg" fontWeight="bold">{calls[idx].patient}'s mood</Text>
             <Text>{calls[idx].date}</Text>
-            <LineChart width={300} height={500} data={calls[idx].mood.map((m, i) => ({
+            <LineChart width={300} height={500} data={moods.map((m, i) => ({
                 mood: m,
                 time: i
             }))}>

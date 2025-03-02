@@ -68,7 +68,7 @@ const Chat = () => {
     // Fetch messages from server
     useEffect(() => {
         axios.get(`http://localhost:3000/messages`)
-            .then(response => console.log(response, response.data));
+            .then(response => setMessages(response.data));
     }, []);
 
     return <Main p="4" display="box">
@@ -80,11 +80,11 @@ const Chat = () => {
             {messages.map((msg, i) => <ChatBubble {...msg} key={i} />)}
             <Flex ref={chatRef} h="10" />
         </Flex>
-        <Flex width="xl" mt="2" position="fixed" pb="4" bottom="0" bg="var(--chakra-colors-chakra-body-bg)" borderTopRadius="xl">
+        {/*<Flex width="xl" mt="2" position="fixed" pb="4" bottom="0" bg="var(--chakra-colors-chakra-body-bg)" borderTopRadius="xl">
             <Flex direction="column" bg="gray.200" _dark={{"bg": "gray.500"}} borderColor="gray.500" borderRadius="xl" p="6" w="full">
                 Summary: {chatSummary}
             </Flex>
-        </Flex>
+        </Flex>*/}
     </Main>;
 };
 
