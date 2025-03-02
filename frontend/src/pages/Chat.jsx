@@ -57,6 +57,9 @@ const Chat = () => {
 
     useEffect(() => {
         // todo get live updates from server
+        // setMessages(...);
+        // setChatSummary(...);
+
         if (chatRef.current) {
             chatRef.current.scrollIntoView({behavior: "smooth"});
         }

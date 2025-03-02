@@ -1,9 +1,9 @@
 import {Box, Flex, Heading, Icon, Image, VStack} from "@chakra-ui/react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Link} from "react-router";
 import Button from "../components/Button";
 import Main from "../components/Main";
-import {IconPhoneIncoming, IconPhoneOutgoing} from "@tabler/icons-react";
+// import {IconPhoneIncoming, IconPhoneOutgoing} from "@tabler/icons-react";
 
 const Dashboard = () => {
     const [calls, setCalls] = useState([
@@ -14,7 +14,6 @@ const Dashboard = () => {
             time: "1:30pm",
             duration: "2hrs",
             summary: "Jane talks about her family",
-            alerts: []
         }, {
             patient: "John Doe",
             type: "incoming",
@@ -22,7 +21,6 @@ const Dashboard = () => {
             time: "4:20pm",
             duration: "2hrs",
             summary: "John talks about his new hobbies",
-            alerts: []
         }, {
             patient: "Jane Doe",
             type: "incoming",
@@ -30,9 +28,13 @@ const Dashboard = () => {
             time: "4:20pm",
             duration: "5hrs",
             summary: "Jane falls down the stairs and calls for help",
-            alerts: ["injury"]
         },
     ]);
+
+    useEffect(() => {
+        // todo ping server
+        // setCalls([...calls, data]);
+    }, []);
 
     return <Main direction="row">
         <Flex direction="column">

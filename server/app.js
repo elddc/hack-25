@@ -114,6 +114,14 @@ app.ws("/connection", (ws) => {
             interactionCount += 1;
 
             // todo send data to doctor
+            /*
+            {
+                patient: "Jane Doe",
+                type: "outgoing",
+                msg: "...",
+                sender: "patient/bot"
+            }
+             */
         });
 
         gptService.on("gptreply", async (gptReply, icount) => {
