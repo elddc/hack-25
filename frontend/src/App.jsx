@@ -23,9 +23,9 @@ function App() {
         <ChakraProvider theme={theme}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={Dashboard} />
-                    <Route path="/chat" element={Chat} />
-                    <Route path="*" element={Error404} />
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/chat" element={<Chat />} />
+                    <Route path="*" element={<Error404 />} />
                 </Routes>
             </BrowserRouter>
         </ChakraProvider>

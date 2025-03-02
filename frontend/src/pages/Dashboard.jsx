@@ -39,16 +39,15 @@ const Dashboard = () => {
     return <Main direction="row">
         <Flex direction="column">
             <Heading size="xl">Call Log</Heading>
-            {calls.map(({patient, type, date, time, summary, alerts}, i) =>
+            {calls.map((call, i) =>
                 <Flex direction="row" key={i} borderY="1" borderColor="gray.500">
-                    <Image src={`${patient}.png`} alt={patient} boxSize="12" objectFit="cover" borderRadius="full"/>
+                    {/*<Image src={`${patient}.png`} alt={patient} boxSize="12" objectFit="cover" borderRadius="full"/>*/}
                     <Flex>
-                        <Text>{patient}</Text>
-                        <Text color="gray.300">{summary}</Text>
+                        <Text>{call.patient}</Text>
+                        {/*<Text color="gray.300">{summary}</Text>*/}
                     </Flex>
                     <Flex>
-                        {/*{type=="incoming" ? (<IconPhoneIncoming />) : (<IconPhoneOutgoing />)}*/}
-                        <Text>{time}</Text>
+                        {/*<Text>{time}</Text>*/}
                     </Flex>
                 </Flex>
             )}
@@ -56,4 +55,4 @@ const Dashboard = () => {
     </Main>;
 };
 
-export default <Dashboard />;
+export default Dashboard;

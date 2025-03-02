@@ -82,4 +82,4 @@ const Chat = () => {
     </Main>;
 };
 
-export default <Chat />;
+export default Chat;

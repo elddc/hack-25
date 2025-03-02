@@ -89,6 +89,14 @@ app.ws("/connection", (ws) => {
                 marks = marks.filter(m => m !== msg.mark.name);
             } else if (msg.event === "stop") {
                 console.log(`Twilio -> Media stream ${streamSid} ended.`.underline.red);
+                // todo end of convo, summarize and send data to doctor
+                /*
+                {
+                    patient: "Jane Doe",
+                    type: "outgoing",
+                    summary: "..."
+                }
+                 */
             }
         });
 
@@ -119,7 +127,7 @@ app.ws("/connection", (ws) => {
                 patient: "Jane Doe",
                 type: "outgoing",
                 msg: "...",
-                sender: "patient/bot"
+                sender: "patient"
             }
              */
         });
@@ -129,6 +137,14 @@ app.ws("/connection", (ws) => {
             ttsService.generate(gptReply, icount);
 
             // todo send data to doctor
+            /*
+            {
+                patient: "Jane Doe",
+                type: "outgoing",
+                msg: "...",
+                sender: "bot"
+            }
+             */
         });
 
         ttsService.on("speech", (responseIndex, audio, label, icount) => {
