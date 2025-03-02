@@ -10,6 +10,14 @@ import TextInput from "../components/TextInput";
 
 const Chat = () => {
     const nav = useNavigate();
+    const [metadata, setMetadata] = useState({
+        patient: "Jane Doe",
+        type: "outgoing",
+        date: "Feb 28, 2025",
+        time: "1:30pm",
+        duration: "2hrs",
+        summary: "Jane talks about her family",
+    });
     const [messages, setMessages] = useState([
         {
             sender: "system",
