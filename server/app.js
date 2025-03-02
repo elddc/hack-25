@@ -11,6 +11,7 @@ const {TextToSpeechService} = require("./services/tts-service");
 const {recordingService} = require("./services/recording-service");
 
 const {makeOutBoundCall} = require("./scripts/outbound-call");
+const user = require("./config/user");
 
 const VoiceResponse = require("twilio").twiml.VoiceResponse;
 const client = require("twilio").calls;
@@ -77,7 +78,7 @@ app.ws("/connection", (ws) => {
                     console.log(`Twilio -> Starting Media Stream for ${streamSid}`.underline.red);
                     ttsService.generate({
                         partialResponseIndex: null,
-                        partialResponse: `Hello ${process.env.NAME}! How are you doing today?`,
+                        partialResponse: `Hello ${user.name}! How are you doing today?`,
                     }, 0);
                 });
             } else if (msg.event === "media") {

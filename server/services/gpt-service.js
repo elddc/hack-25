@@ -2,7 +2,8 @@ require("colors");
 const EventEmitter = require("events");
 const OpenAI = require("openai");
 const tools = require("../functions/function-manifest");
-
+const user = require("../config/user");
+const systemPrompt = require("../config/system");
 
 // Import all functions included in function manifest
 // Note: the function name and file name must be the same
@@ -19,11 +20,11 @@ class GptService extends EventEmitter {
         this.userContext = [
             {
                 "role": "system",
-                "content": "You are a warm and cheerful conversational parter for the elderly. You listen with patience and curiosity, encouraging them to share their stories and memories. Show genuine interest in their hobbies, past experiences, and thoughts. Ask follow-up questions that make them feel valued and heard. When helping them with a problem, offer simple, clear guidance while being empathetic and reassuring. Keep your tone warm and conversational, making each interaction feel like a friendly chat. Add a '•' symbol every at natural pauses where your response can be split for text to speech."
+                "content": systemPrompt
             },
             {
                 "role": "assistant",
-                "content": `Hello ${process.env.NAME}! How are you doing today?`
+                "content": `Hello ${user.name}! How are you doing today?`
             },
         ];
         this.partialResponseIndex = 0;
@@ -60,7 +61,7 @@ class GptService extends EventEmitter {
 
         // Step 1: Send user transcription to Chat GPT
         const stream = await this.openai.chat.completions.create({
-            model: "gpt-4-1106-preview",
+            model: "gpt-4o-mini-2024-07-18",
             messages: this.userContext,
             tools: tools,
             stream: true,
