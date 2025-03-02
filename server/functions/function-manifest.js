@@ -1,6 +1,6 @@
 // create metadata for all the available functions to pass to completions API
 const tools = [
-    {
+    /*{
         type: "function",
         function: {
             name: "askDoctor",
@@ -26,7 +26,8 @@ const tools = [
                 }
             }
         },
-    }, {
+    },*/
+    {
         type: "function",
         function: {
             name: "logMood",

@@ -17,6 +17,7 @@ class GptService extends EventEmitter {
     constructor() {
         super();
         this.openai = new OpenAI();
+        this.model = "gpt-4o-mini-2024-07-18";
         this.userContext = [
             {
                 "role": "system",
@@ -61,7 +62,7 @@ class GptService extends EventEmitter {
 
         // Step 1: Send user transcription to Chat GPT
         const stream = await this.openai.chat.completions.create({
-            model: "gpt-4o-mini-2024-07-18",
+            model: this.model,
             messages: this.userContext,
             tools: tools,
             stream: true,
@@ -74,7 +75,7 @@ class GptService extends EventEmitter {
         let finishReason = "";
 
         function collectToolInformation(deltas) {
-            console.log(deltas); // todo handle multiple function calls in one response
+            // console.log(deltas); // todo handle multiple function calls in one response
 
             let name = deltas.tool_calls[0]?.function?.name || "";
             if (name !== "") {
@@ -142,6 +143,26 @@ class GptService extends EventEmitter {
         }
         this.userContext.push({"role": "assistant", "content": completeResponse});
         console.log(`GPT -> user context length: ${this.userContext.length}`.green);
+    }
+
+    async summarize() {
+        console.log("summarizing...");
+        this.updateUserContext("admin", "user", "Please summarize the conversation so far in 10 words or less.");
+
+        // Step 1: Send user transcription to Chat GPT
+        const res = await this.openai.chat.completions.create({
+            model: this.model,
+            messages: this.userContext,
+            stream: false,
+        });
+
+        console.log(res.choices[0].message);
+        /* todo send data to doctor
+        {
+            patient: "Jane Doe",
+            summary: res.choices[0].message
+        }
+         */
     }
 }
 

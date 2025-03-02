@@ -89,14 +89,9 @@ app.ws("/connection", (ws) => {
                 marks = marks.filter(m => m !== msg.mark.name);
             } else if (msg.event === "stop") {
                 console.log(`Twilio -> Media stream ${streamSid} ended.`.underline.red);
-                // todo end of convo, summarize and send data to doctor
-                /*
-                {
-                    patient: "Jane Doe",
-                    type: "outgoing",
-                    summary: "..."
-                }
-                 */
+
+                // end of convo, summarize and send data to doctor
+                gptService.summarize();
             }
         });
 
