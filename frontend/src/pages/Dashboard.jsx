@@ -1,12 +1,13 @@
 import {Box, Flex, Heading, Icon, Image, Text} from "@chakra-ui/react";
+import axios from "axios";
 import {useEffect, useState} from "react";
 import {Link} from "react-router";
 import Button from "../components/Button";
 import Main from "../components/Main";
+import {LineChart, Line, Tooltip, YAxis} from 'recharts';
 import {IconPhoneIncoming, IconPhoneOutgoing} from "@tabler/icons-react";
 
-import {LineChart} from '@mui/x-charts/LineChart';
-import getJournalEntry from "../utils/solana";
+const emojis = ["😭", "😢", "😞", "😔", "😕", "😐", "🙂", "😊", "😁", "😆", "🤩"];
 
 const Dashboard = () => {
     const [calls, setCalls] = useState([
@@ -17,6 +18,7 @@ const Dashboard = () => {
             time: "1:30pm",
             duration: "2hrs",
             summary: "Jane talks about her family",
+            mood: [1, 2, 5, 6, 9, 8]
         }, {
             patient: "John Doe",
             type: "incoming",
@@ -24,6 +26,7 @@ const Dashboard = () => {
             time: "4:20pm",
             duration: "2hrs",
             summary: "John talks about his new hobbies",
+            mood: [8, 7, 9, 10, 10, 9]
         }, {
             patient: "Jane Doe",
             type: "incoming",
@@ -31,8 +34,10 @@ const Dashboard = () => {
             time: "4:20pm",
             duration: "5hrs",
             summary: "Jane is confused about where she is",
+            mood: [5, 4, 6, 2, 3]
         },
     ]);
+    const [idx, setIdx] = useState(0);
 
     /*
     useEffect(() => {
@@ -41,18 +46,13 @@ const Dashboard = () => {
     }, []);
     */
 
-    const showDetail = () => {
-        // todo
-        // getJournalEntry("provider", "ownerPubkey", "title");
-    }
-
-    return <Main direction="row">
+    return <Main flexDir="row" gap="12" maxW="none">
         <Flex direction="column">
             <Heading size="xl" mb="4">Call Log</Heading>
             {calls.map(({patient, summary, time, type, date}, i) => {
                 const showDate = (i === 0 || date !== calls[i - 1].date);
                 let content = (
-                    <Flex as="button" onClick={() => showDetail(i)} direction="row" align="center" key={i}
+                    <Flex as="button" onClick={() => setIdx(i)} direction="row" align="center" key={i}
                           borderTop={!showDate && "1px"} borderColor="gray.500" p="2" gap="4">
                         <Image src={`${patient}.png`} alt={patient} boxSize="12" objectFit="cover"
                                borderRadius="full" />
@@ -79,17 +79,17 @@ const Dashboard = () => {
                 return content;
             })}
         </Flex>
-        <Flex>
-            <LineChart
-                xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-                series={[
-                    {
-                        data: [2, 5.5, 2, 8.5, 1.5, 5],
-                    },
-                ]}
-                width={500}
-                height={300}
-            />
+        <Flex direction="column" align="end">
+            <Text as="h1" fontSize="lg" fontWeight="bold">{calls[idx].patient}'s mood</Text>
+            <Text>{calls[idx].date}</Text>
+            <LineChart width={300} height={600} data={calls[idx].mood.map((m, i) => ({
+                mood: m,
+                time: i
+            }))}>
+                <Line type="monotone" stroke="var(--chakra-colors-blue-400)" dataKey="mood" />
+                <YAxis tickFormatter={(value) => emojis[value]} domain={[0, 10]} />
+                <Tooltip labelStyle={{"display": "none"}} formatter={(value) => [emojis[value], ""]} cursor={false} separator="" allowEscapeViewBox={{ x: true, y: true }} animationDuration={300} />
+            </LineChart>
         </Flex>
     </Main>;
 };

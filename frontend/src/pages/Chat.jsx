@@ -6,7 +6,6 @@ import Button from "../components/Button";
 import ChatBubble from "../components/ChatBubble";
 import Loading from "../components/Loading";
 import Main from "../components/Main";
-import TextInput from "../components/TextInput";
 
 const Chat = () => {
     const nav = useNavigate();

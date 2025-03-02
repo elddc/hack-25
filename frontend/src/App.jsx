@@ -4,7 +4,7 @@ import Chat from "./pages/Chat";
 import Error404 from "./pages/errors/Error404";
 import Dashboard from "./pages/Dashboard";
 
-import { extendTheme } from "@chakra-ui/react"
+import { extendTheme } from "@chakra-ui/react";
 
 const theme = extendTheme({
     components: {

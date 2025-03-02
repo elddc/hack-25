@@ -32,6 +32,24 @@ app.get("/outgoing", (req, res) => {
     makeOutBoundCall();
 })
 
+app.get("/solana", async (req, res) => {
+    // const { owner, title } = req.query; // todo
+    const owner = "...";
+    const title = "...";
+
+    if (!owner || !title) {
+        return res.status(400).send("Missing owner or title");
+    }
+
+    try {
+        // todo
+        solanaService(owner, title).then(data => res.json(data));
+    } catch (error) {
+        console.error("Failed to fetch journal entry:", error);
+        res.status(500).send("Failed to fetch journal entry");
+    }
+});
+
 app.post("/incoming", (req, res) => {
     try {
         console.log("incoming call");
