@@ -1,13 +1,13 @@
 import {Box, Flex, Text} from "@chakra-ui/react";
 import {IconArrowBack, IconArrowLeft, IconArrowUp} from "@tabler/icons-react";
+import axios from "axios";
 import {useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router";
 import Button from "../components/Button";
 import ChatBubble from "../components/ChatBubble";
-import Loading from "../components/Loading";
 import Main from "../components/Main";
 
-const API_URL = "http://127.0.0.1:5000";
+const API_URL = "https://271c-173-230-107-49.ngrok-free.app";
 
 const Chat = () => {
     const nav = useNavigate();
@@ -67,24 +67,9 @@ const Chat = () => {
 
     // Fetch messages from server
     useEffect(() => {
-        fetch(`${API_URL}/messages`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                setMessages(data);
-                // setChatSummary(data.summary || "No summary available");
-            })
-            .catch(error => console.error("Error fetching messages:", error));
+        axios.get(`http://localhost:3000/messages`)
+            .then(response => console.log(response, response.data));
     }, []);
-    useEffect(() => {
-        // todo get live updates from server
-        // setMessages(...);
-        // setChatSummary(...);
-
-        if (chatRef.current) {
-            chatRef.current.scrollIntoView({behavior: "smooth"});
-        }
-    }, [chatRef, messages]);
 
     return <Main p="4" display="box">
         <Button onClick={() => nav(-1)} p="0" position="fixed" top="2" left="2" variant="ghost" colorScheme="gray">

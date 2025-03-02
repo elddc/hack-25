@@ -5,7 +5,7 @@ import {Link} from "react-router";
 import Button from "../components/Button";
 import Main from "../components/Main";
 import {LineChart, Line, Tooltip, YAxis} from 'recharts';
-import {IconPhoneIncoming, IconPhoneOutgoing} from "@tabler/icons-react";
+import {IconArrowRight, IconPhoneIncoming, IconPhoneOutgoing} from "@tabler/icons-react";
 
 const emojis = ["😭", "😢", "😞", "😔", "😕", "😐", "🙂", "😊", "😁", "😆", "🤩"];
 
@@ -16,7 +16,6 @@ const Dashboard = () => {
             type: "outgoing",
             date: "Feb 28, 2025",
             time: "1:30pm",
-            duration: "2hrs",
             summary: "Jane talks about her family",
             mood: [1, 2, 5, 6, 9, 8]
         }, {
@@ -24,7 +23,6 @@ const Dashboard = () => {
             type: "incoming",
             date: "March 1, 2025",
             time: "4:20pm",
-            duration: "2hrs",
             summary: "John talks about his new hobbies",
             mood: [8, 7, 9, 10, 10, 9]
         }, {
@@ -32,7 +30,6 @@ const Dashboard = () => {
             type: "incoming",
             date: "March 1, 2025",
             time: "4:20pm",
-            duration: "5hrs",
             summary: "Jane is confused about where she is",
             mood: [5, 4, 6, 2, 3]
         },
@@ -44,18 +41,15 @@ const Dashboard = () => {
     //     setCalls([...calls, data]);
     // }, []);
     useEffect(() => {
-        fetch("http://127.0.0.1:5000/messages")
-            .then(response => response.json())
-            .then(data => {
-                setMessages(data);
-                setLoading(false);
+        fetch(`https://localhost:3000/chat`)
+            .then(res => {
+                setMessages(res.body);
             })
             .catch(error => {
                 console.error("Error fetching messages:", error);
-                setLoading(false);
             });
     }, []);
-    
+
 
     return <Main flexDir="row" gap="12" maxW="none">
         <Flex direction="column">
@@ -93,7 +87,7 @@ const Dashboard = () => {
         <Flex direction="column" align="end">
             <Text as="h1" fontSize="lg" fontWeight="bold">{calls[idx].patient}'s mood</Text>
             <Text>{calls[idx].date}</Text>
-            <LineChart width={300} height={600} data={calls[idx].mood.map((m, i) => ({
+            <LineChart width={300} height={500} data={calls[idx].mood.map((m, i) => ({
                 mood: m,
                 time: i
             }))}>
@@ -101,6 +95,7 @@ const Dashboard = () => {
                 <YAxis tickFormatter={(value) => emojis[value]} domain={[0, 10]} />
                 <Tooltip labelStyle={{"display": "none"}} formatter={(value) => [emojis[value], ""]} cursor={false} separator="" allowEscapeViewBox={{ x: true, y: true }} animationDuration={300} />
             </LineChart>
+            <Button as={Link} to="/chat">View logs<IconArrowRight /></Button>
         </Flex>
     </Main>;
 };

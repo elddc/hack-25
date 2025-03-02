@@ -4,6 +4,7 @@ const OpenAI = require("openai");
 const tools = require("../functions/function-manifest");
 const user = require("../config/user");
 const systemPrompt = require("../config/system");
+const axios = require("axios");
 
 // Import all functions included in function manifest
 // Note: the function name and file name must be the same
@@ -29,6 +30,10 @@ class GptService extends EventEmitter {
             },
         ];
         this.partialResponseIndex = 0;
+
+        // call data
+        this.callType = "";
+        this.mood = [];
     }
 
     // Add the callSid to the chat context in case
@@ -59,6 +64,13 @@ class GptService extends EventEmitter {
 
     async completion(text, interactionCount, role = "user", name = "user") {
         this.updateUserContext(name, role, text);
+        // todo send data to doctor
+        axios.post(`${process.env.SOLANA}/messages`, {
+            // patient: "Jane Doe",
+            text: text,
+            sender: "user",
+            mid: 0
+        });
 
         // Step 1: Send user transcription to Chat GPT
         const stream = await this.openai.chat.completions.create({
@@ -107,7 +119,7 @@ class GptService extends EventEmitter {
                 // Say a pre-configured message from the function manifest
                 // before running the function.
                 const toolData = tools.find(tool => tool.function.name === functionName);
-                const say = toolData.function.say;
+                // const say = toolData.function.say;
 
                 // this.emit("gptreply", {
                 //     partialResponseIndex: null,
@@ -115,6 +127,9 @@ class GptService extends EventEmitter {
                 // }, interactionCount);
 
                 let functionResponse = await functionToCall(validatedArgs);
+
+                // only ever use mood func so
+                this.mood.push(functionResponse);
 
                 // Step 4: send the info on the function call and function response to GPT
                 this.updateUserContext(functionName, "function", functionResponse);
@@ -141,10 +156,19 @@ class GptService extends EventEmitter {
         }
         this.userContext.push({"role": "assistant", "content": completeResponse});
         console.log(`GPT -> user context length: ${this.userContext.length}`.green);
+
+        // todo send data to doctor
+        axios.post(`${process.env.SOLANA}/messages`, {
+            // patient: "Jane Doe",
+            text: completeResponse,
+            sender: "bot",
+            mid: 0
+        });
     }
 
-    async summarize() {
+    async summarize(call_type) {
         console.log("summarizing...");
+        // not this sometimes misbehaves
         this.updateUserContext("admin", "user", "Please summarize the conversation so far in 10 words or less.");
 
         // Step 1: Send user transcription to Chat GPT
@@ -154,13 +178,24 @@ class GptService extends EventEmitter {
             stream: false,
         });
 
-        console.log(res.choices[0].message);
-        /* todo send data to doctor
-        {
-            patient: "Jane Doe",
-            summary: res.choices[0].message
+        try {
+            axios.post(`${process.env.SOLANA}/chat`, {
+                patient: "Jane Doe",
+                summary: res.choices[0].message.content,
+                mood: this.mood.toString(),
+                type: call_type
+            })
+        } catch (e) {
+
         }
-         */
+
+        console.log(this.mood);
+        console.log({
+            patient: "Jane Doe",
+            summary: res.choices[0].message,
+            mood: this.mood.toString(),
+            type: call_type
+        })
     }
 }
 

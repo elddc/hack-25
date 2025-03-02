@@ -3,6 +3,7 @@ require("colors");
 
 const express = require("express");
 const ExpressWs = require("express-ws");
+const axios = require("axios");
 
 const {GptService} = require("./services/gpt-service");
 const {StreamService} = require("./services/stream-service");
@@ -21,12 +22,27 @@ ExpressWs(app);
 
 const PORT = process.env.PORT || 3000;
 
+let call_type = "incoming";
+let id = 0;
+
 app.get("/status", (req, res) => {
     console.log("status check");
     res.send("app is running");
 });
 
+app.get("/messages", (req, res) => {
+    axios.get("https://271c-173-230-107-49.ngrok-free.app/messages")
+    .then(response => res.send(response.data));
+})
+
+app.get("/chat", (req, res) => {
+    axios.get("https://271c-173-230-107-49.ngrok-free.app/chat")
+    .then(response => res.send(response.data));
+})
+
 app.get("/outgoing", (req, res) => {
+    // only rly works for one call at a time
+    call_type = "outgoing";
     console.log("outgoing call");
     res.send("call in progress");
     makeOutBoundCall();
@@ -110,7 +126,7 @@ app.ws("/connection", (ws) => {
                 console.log(`Twilio -> Media stream ${streamSid} ended.`.underline.red);
 
                 // end of convo, summarize and send data to doctor
-                gptService.summarize();
+                gptService.summarize(call_type);
             }
         });
 
@@ -134,31 +150,11 @@ app.ws("/connection", (ws) => {
             console.log(`Interaction ${interactionCount} – STT -> GPT: ${text}`.yellow);
             gptService.completion(text, interactionCount);
             interactionCount += 1;
-
-            // todo send data to doctor
-            /*
-            {
-                patient: "Jane Doe",
-                type: "outgoing",
-                msg: "...",
-                sender: "patient"
-            }
-             */
         });
 
         gptService.on("gptreply", async (gptReply, icount) => {
             console.log(`Interaction ${icount}: GPT -> TTS: ${gptReply.partialResponse}`.green);
             ttsService.generate(gptReply, icount);
-
-            // todo send data to doctor
-            /*
-            {
-                patient: "Jane Doe",
-                type: "outgoing",
-                msg: "...",
-                sender: "bot"
-            }
-             */
         });
 
         ttsService.on("speech", (responseIndex, audio, label, icount) => {
