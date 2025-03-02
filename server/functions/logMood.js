@@ -8,7 +8,7 @@ async function logMood(functionArgs) {
     /*
     {
         patient: "Jane Doe",
-        mood: 5,
+        mood: happiness, // int
     }
      */
     return "Mood logged.";

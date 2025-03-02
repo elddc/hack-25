@@ -47,6 +47,7 @@ app.post("/incoming", (req, res) => {
     }
 });
 
+// todo increase duration before sending user message? sometimes gets double response
 app.ws("/connection", (ws) => {
     try {
         ws.on("error", console.error);

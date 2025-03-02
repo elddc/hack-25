@@ -75,8 +75,6 @@ class GptService extends EventEmitter {
         let finishReason = "";
 
         function collectToolInformation(deltas) {
-            // console.log(deltas); // todo handle multiple function calls in one response
-
             let name = deltas.tool_calls[0]?.function?.name || "";
             if (name !== "") {
                 functionName = name;
