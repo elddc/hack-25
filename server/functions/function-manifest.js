@@ -5,26 +5,60 @@ const tools = [
         function: {
             name: "askDoctor",
             say: "Let me check in with your doctor.",
-            description: "Contact a medical doctor to help answer a question.",
+            description: "Contact a medical doctor for advice in handling a medical problem.",
             parameters: {
                 type: "object",
                 properties: {
-                    model: {
+                    query: {
                         type: "string",
-                        description: "The medical question to answer.",
+                        description: "The user\'s description of the problem.",
                     },
                 },
-                required: ["model"],
+                required: ["question"]
             },
             returns: {
                 type: "object",
                 properties: {
                     response: {
                         type: "string",
-                        description: "The doctor\'s response to the question."
+                        description: "The doctor\'s advice." // Relay this verbatim to the user."
                     }
                 }
             }
+        },
+    }, {
+        type: "function",
+        function: {
+            name: "logMood",
+            description: "Record the user\'s mood.",
+            parameters: {
+                type: "object",
+                properties: {
+                    happiness: {
+                        type: "integer",
+                        description: "The user's happiness as a number between 0 and 10, where 0 is unhappy, 5 is neutral, and 10 is happy."
+                    },
+                    /*mood: {
+                        type: "string",
+                        "enum": ["calm", "happy", "sad", "suprised", "confused", "scared", "angry"]
+                        description: "The mood of the user",
+                    },*/
+                    reason: {
+                        type: "string",
+                        description: "The reason or event that caused the user's mood." // optional
+                    }
+                },
+                required: ["happiness"],
+            },
+            // returns: {
+            //     type: "object",
+            //     properties: {
+            //         price: {
+            //             type: "integer",
+            //             description: "the price of the model"
+            //         }
+            //     }
+            // }
         },
     },
     /*  {

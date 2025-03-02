@@ -74,6 +74,8 @@ class GptService extends EventEmitter {
         let finishReason = "";
 
         function collectToolInformation(deltas) {
+            console.log(deltas); // todo handle multiple function calls in one response
+
             let name = deltas.tool_calls[0]?.function?.name || "";
             if (name !== "") {
                 functionName = name;
@@ -108,10 +110,10 @@ class GptService extends EventEmitter {
                 const toolData = tools.find(tool => tool.function.name === functionName);
                 const say = toolData.function.say;
 
-                this.emit("gptreply", {
-                    partialResponseIndex: null,
-                    partialResponse: say
-                }, interactionCount);
+                // this.emit("gptreply", {
+                //     partialResponseIndex: null,
+                //     partialResponse: say
+                // }, interactionCount);
 
                 let functionResponse = await functionToCall(validatedArgs);
 
