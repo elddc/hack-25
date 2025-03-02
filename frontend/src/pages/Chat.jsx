@@ -7,6 +7,8 @@ import ChatBubble from "../components/ChatBubble";
 import Loading from "../components/Loading";
 import Main from "../components/Main";
 
+const API_URL = "http://127.0.0.1:5000";
+
 const Chat = () => {
     const nav = useNavigate();
     const [metadata, setMetadata] = useState({
@@ -62,6 +64,18 @@ const Chat = () => {
     const [chatSummary, setChatSummary] = useState("Hello world!");
     const chatRef = useRef();
 
+
+    // Fetch messages from server
+    useEffect(() => {
+        fetch(`${API_URL}/messages`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setMessages(data);
+                // setChatSummary(data.summary || "No summary available");
+            })
+            .catch(error => console.error("Error fetching messages:", error));
+    }, []);
     useEffect(() => {
         // todo get live updates from server
         // setMessages(...);

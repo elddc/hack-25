@@ -39,12 +39,23 @@ const Dashboard = () => {
     ]);
     const [idx, setIdx] = useState(0);
 
-    /*
+    // useEffect(() => {
+    //     // todo ping server
+    //     setCalls([...calls, data]);
+    // }, []);
     useEffect(() => {
-        // todo ping server
-        setCalls([...calls, data]);
+        fetch("http://127.0.0.1:5000/messages")
+            .then(response => response.json())
+            .then(data => {
+                setMessages(data);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error("Error fetching messages:", error);
+                setLoading(false);
+            });
     }, []);
-    */
+    
 
     return <Main flexDir="row" gap="12" maxW="none">
         <Flex direction="column">
